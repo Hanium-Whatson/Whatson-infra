@@ -1,4 +1,0 @@
-version: 1
-display_name: Infra Restart Recovery
-short_description: Recover Terraform infra after destroy and redeploy
-default_prompt: Recover and verify infrastructure after terraform destroy/apply cycles.

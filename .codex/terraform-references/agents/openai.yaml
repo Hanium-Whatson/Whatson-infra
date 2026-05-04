@@ -1,0 +1,4 @@
+interface:
+  display_name: "Terraform 7 References"
+  short_description: "Use Terraform/OpenTofu reference playbooks by failure mode."
+  default_prompt: "Use this skill to choose the right Terraform reference by problem type and provide risk-aware remediation."
