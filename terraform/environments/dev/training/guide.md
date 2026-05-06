@@ -217,4 +217,4 @@ terraform apply -var-file=terraform.tfvars
 - `training_entrypoint`
 - `training_environment_variables`
 
-특히 GPU 학습을 바로 돌릴 계획이면 기본 Amazon Linux 대신 CUDA/드라이버가 포함된 커스텀 AMI 또는 사전 구성된 이미지 전략을 정하는 것이 좋다. 현재 기본값은 인프라 검증 우선 기준이다.
+특히 GPU 학습을 바로 돌릴 계획이면 기본 Ubuntu AMI 대신 CUDA/드라이버가 포함된 커스텀 AMI 또는 사전 구성된 이미지 전략을 정하는 것이 좋다. 현재 기본값은 인프라 검증 우선 기준이다.
