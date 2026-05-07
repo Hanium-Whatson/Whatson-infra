@@ -26,7 +26,7 @@ output "lambda_functions" {
   value = {
     crawl      = module.crawl_job.function_name
     preprocess = module.preprocess_job.function_name
-    augment    = module.augment_job.function_name
+    falsify_news = module.falsify_news_job.function_name
   }
 }
 

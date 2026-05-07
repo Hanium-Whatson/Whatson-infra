@@ -37,20 +37,20 @@ module "preprocess_job" {
   s3_bucket_arn          = module.data_lake.bucket_arn
   s3_object_prefixes     = [local.raw_prefix, local.processed_prefix]
   lambda_invoke_function_arns = [
-    module.augment_job.function_arn,
+    module.falsify_news_job.function_arn,
   ]
   environment_variables = {
-    DATA_LAKE_BUCKET       = module.data_lake.bucket_name
-    RAW_PREFIX             = local.raw_prefix
-    PROCESSED_PREFIX       = local.processed_prefix
-    AUGMENT_FUNCTION_NAME  = module.augment_job.function_name
-    JOB_STAGE              = "preprocess"
+    DATA_LAKE_BUCKET           = module.data_lake.bucket_name
+    RAW_PREFIX                 = local.raw_prefix
+    PROCESSED_PREFIX           = local.processed_prefix
+    FALSIFY_NEWS_FUNCTION_NAME = module.falsify_news_job.function_name
+    JOB_STAGE                  = "preprocess"
   }
 }
 
-module "augment_job" {
+module "falsify_news_job" {
   source                 = "../../../modules/pipeline/lambda_job"
-  name                   = "${var.project_name}-${var.environment}-augment"
+  name                   = "${var.project_name}-${var.environment}-falsify-news"
   runtime                = "python3.12"
   handler                = "main.handler"
   timeout                = 900
@@ -62,6 +62,6 @@ module "augment_job" {
     DATA_LAKE_BUCKET = module.data_lake.bucket_name
     PROCESSED_PREFIX = local.processed_prefix
     DATASET_PREFIX   = local.dataset_prefix
-    JOB_STAGE        = "augment"
+    JOB_STAGE        = "falsify_news"
   }
 }
