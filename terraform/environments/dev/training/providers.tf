@@ -23,14 +23,6 @@ variable "crawl_schedule_expression" {
   type    = string
   default = "rate(6 hours)"
 }
-variable "preprocess_schedule_expression" {
-  type    = string
-  default = "rate(12 hours)"
-}
-variable "augment_schedule_expression" {
-  type    = string
-  default = "rate(1 day)"
-}
 variable "training_instance_type" {
   type    = string
   default = "g4dn.xlarge"

@@ -5,9 +5,7 @@ vpc_cidr               = "10.10.0.0/16"
 data_lake_bucket_name  = "whatson-dev-training-data-example"
 training_instance_type = "g4dn.xlarge"
 
-crawl_schedule_expression      = "rate(6 hours)"
-preprocess_schedule_expression = "rate(12 hours)"
-augment_schedule_expression    = "rate(1 day)"
+crawl_schedule_expression = "rate(6 hours)"
 
 training_entrypoint = <<-EOT
 echo "Starting placeholder training bootstrap"

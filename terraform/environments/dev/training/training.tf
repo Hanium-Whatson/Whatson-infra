@@ -1,7 +1,7 @@
 module "training_runner" {
   source               = "../../../modules/compute/training_spot_runner"
   name                 = "${var.project_name}-${var.environment}-training-runner"
-  subnet_id            = module.network.private_subnet_ids[0]
+  subnet_id            = module.network.public_subnet_ids[0]
   security_group_ids   = [module.security.ec2_sg_id]
   instance_type        = var.training_instance_type
   ami_id               = var.training_ami_id
