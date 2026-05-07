@@ -29,3 +29,12 @@ variable "s3_object_prefixes" {
   type    = list(string)
   default = []
 }
+
+variable "dynamodb_table_arn" {
+  type    = string
+  default = null
+}
+variable "lambda_invoke_function_arns" {
+  type    = list(string)
+  default = []
+}

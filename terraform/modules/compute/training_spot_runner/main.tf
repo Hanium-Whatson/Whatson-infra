@@ -73,7 +73,7 @@ resource "aws_instance" "this" {
   vpc_security_group_ids      = var.security_group_ids
   iam_instance_profile        = aws_iam_instance_profile.this.name
   user_data_replace_on_change = true
-  associate_public_ip_address = false
+  associate_public_ip_address = true
 
   instance_market_options {
     market_type = "spot"

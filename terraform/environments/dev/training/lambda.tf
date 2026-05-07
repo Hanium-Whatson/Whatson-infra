@@ -8,18 +8,21 @@ module "crawl_job" {
   name                   = "${var.project_name}-${var.environment}-crawl"
   runtime                = "python3.12"
   handler                = "main.handler"
-  timeout                = 120
-  memory_size            = 512
+  timeout                = 900
+  memory_size            = 1024
   dead_letter_target_arn = module.crawl_dlq.queue_arn
-  subnet_ids             = module.network.private_subnet_ids
-  security_group_ids     = [module.security.lambda_sg_id]
   s3_bucket_arn          = module.data_lake.bucket_arn
   s3_object_prefixes     = [local.raw_prefix]
+  dynamodb_table_arn     = module.duplicate_guard.table_arn
+  lambda_invoke_function_arns = [
+    module.preprocess_job.function_arn,
+  ]
   environment_variables = {
-    DATA_LAKE_BUCKET = module.data_lake.bucket_name
-    RAW_PREFIX       = local.raw_prefix
-    REDIS_ENDPOINT   = module.dedupe_cache.redis_endpoint
-    JOB_STAGE        = "crawl"
+    DATA_LAKE_BUCKET           = module.data_lake.bucket_name
+    RAW_PREFIX                 = local.raw_prefix
+    DUPLICATE_GUARD_TABLE_NAME = module.duplicate_guard.table_name
+    PREPROCESS_FUNCTION_NAME   = module.preprocess_job.function_name
+    JOB_STAGE                  = "crawl"
   }
 }
 
@@ -28,18 +31,20 @@ module "preprocess_job" {
   name                   = "${var.project_name}-${var.environment}-preprocess"
   runtime                = "python3.12"
   handler                = "main.handler"
-  timeout                = 180
-  memory_size            = 512
+  timeout                = 900
+  memory_size            = 1024
   dead_letter_target_arn = module.crawl_dlq.queue_arn
-  subnet_ids             = module.network.private_subnet_ids
-  security_group_ids     = [module.security.lambda_sg_id]
   s3_bucket_arn          = module.data_lake.bucket_arn
   s3_object_prefixes     = [local.raw_prefix, local.processed_prefix]
+  lambda_invoke_function_arns = [
+    module.augment_job.function_arn,
+  ]
   environment_variables = {
-    DATA_LAKE_BUCKET = module.data_lake.bucket_name
-    RAW_PREFIX       = local.raw_prefix
-    PROCESSED_PREFIX = local.processed_prefix
-    JOB_STAGE        = "preprocess"
+    DATA_LAKE_BUCKET       = module.data_lake.bucket_name
+    RAW_PREFIX             = local.raw_prefix
+    PROCESSED_PREFIX       = local.processed_prefix
+    AUGMENT_FUNCTION_NAME  = module.augment_job.function_name
+    JOB_STAGE              = "preprocess"
   }
 }
 
@@ -48,11 +53,9 @@ module "augment_job" {
   name                   = "${var.project_name}-${var.environment}-augment"
   runtime                = "python3.12"
   handler                = "main.handler"
-  timeout                = 300
+  timeout                = 900
   memory_size            = 1024
   dead_letter_target_arn = module.crawl_dlq.queue_arn
-  subnet_ids             = module.network.private_subnet_ids
-  security_group_ids     = [module.security.lambda_sg_id]
   s3_bucket_arn          = module.data_lake.bucket_arn
   s3_object_prefixes     = [local.processed_prefix, local.dataset_prefix]
   environment_variables = {

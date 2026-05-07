@@ -71,6 +71,30 @@ data "aws_iam_policy_document" "inline" {
       resources = [var.dead_letter_target_arn]
     }
   }
+
+  dynamic "statement" {
+    for_each = var.dynamodb_table_arn != null ? [1] : []
+
+    content {
+      sid = "DynamoDbDuplicateGuardAccess"
+      actions = [
+        "dynamodb:PutItem",
+      ]
+      resources = [var.dynamodb_table_arn]
+    }
+  }
+
+  dynamic "statement" {
+    for_each = length(var.lambda_invoke_function_arns) > 0 ? [1] : []
+
+    content {
+      sid = "LambdaInvokeAccess"
+      actions = [
+        "lambda:InvokeFunction",
+      ]
+      resources = var.lambda_invoke_function_arns
+    }
+  }
 }
 
 resource "aws_iam_role" "this" {
