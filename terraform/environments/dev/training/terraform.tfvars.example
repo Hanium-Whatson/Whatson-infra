@@ -1,9 +1,11 @@
-aws_region             = "ap-northeast-2"
-project_name           = "whatson"
-environment            = "dev"
-vpc_cidr               = "10.10.0.0/16"
-data_lake_bucket_name  = "whatson-dev-training-data-example"
-training_instance_type = "g4dn.xlarge"
+aws_region                  = "us-east-1"
+project_name                = "whatson"
+environment                 = "dev"
+existing_vpc_id             = "vpc-xxxxxxxxxxxxxxxxx"
+existing_subnet_id          = "subnet-xxxxxxxxxxxxxxxxx"
+existing_security_group_ids = ["sg-xxxxxxxxxxxxxxxxx"]
+data_lake_bucket_name       = "whatson-dev-training-data-example"
+training_instance_type      = "g4dn.xlarge"
 
 crawl_schedule_expression = "rate(6 hours)"
 

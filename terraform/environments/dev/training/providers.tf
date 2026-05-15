@@ -14,10 +14,9 @@ terraform {
 variable "aws_region" { type = string }
 variable "project_name" { type = string }
 variable "environment" { type = string }
-variable "vpc_cidr" {
-  type    = string
-  default = "10.10.0.0/16"
-}
+variable "existing_vpc_id" { type = string }
+variable "existing_subnet_id" { type = string }
+variable "existing_security_group_ids" { type = list(string) }
 variable "data_lake_bucket_name" { type = string }
 variable "crawl_schedule_expression" {
   type    = string
