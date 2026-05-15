@@ -1,9 +1,9 @@
 output "vpc_id" {
-  value = module.network.vpc_id
+  value = data.aws_vpc.existing.id
 }
 
 output "public_subnet_ids" {
-  value = module.network.public_subnet_ids
+  value = local.existing_public_subnet_ids
 }
 
 output "data_lake_bucket" {
@@ -24,8 +24,8 @@ output "crawl_dlq_arn" {
 
 output "lambda_functions" {
   value = {
-    crawl      = module.crawl_job.function_name
-    preprocess = module.preprocess_job.function_name
+    crawl        = module.crawl_job.function_name
+    preprocess   = module.preprocess_job.function_name
     falsify_news = module.falsify_news_job.function_name
   }
 }

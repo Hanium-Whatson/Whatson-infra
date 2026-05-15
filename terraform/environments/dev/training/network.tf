@@ -1,13 +1,11 @@
-module "network" {
-  source                 = "../../../modules/foundation/network"
-  name                   = "${var.project_name}-${var.environment}-training"
-  vpc_cidr               = var.vpc_cidr
-  enable_private_network = false
+data "aws_vpc" "existing" {
+  id = var.existing_vpc_id
 }
 
-module "security" {
-  source                     = "../../../modules/foundation/security"
-  name                       = "${var.project_name}-${var.environment}-training"
-  vpc_id                     = module.network.vpc_id
-  enable_lambda_redis_access = false
+data "aws_subnet" "training" {
+  id = var.existing_subnet_id
+}
+
+locals {
+  existing_public_subnet_ids = [data.aws_subnet.training.id]
 }

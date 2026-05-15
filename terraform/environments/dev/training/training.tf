@@ -1,8 +1,8 @@
 module "training_runner" {
   source               = "../../../modules/compute/training_spot_runner"
   name                 = "${var.project_name}-${var.environment}-training-runner"
-  subnet_id            = module.network.public_subnet_ids[0]
-  security_group_ids   = [module.security.ec2_sg_id]
+  subnet_id            = data.aws_subnet.training.id
+  security_group_ids   = var.existing_security_group_ids
   instance_type        = var.training_instance_type
   ami_id               = var.training_ami_id
   artifact_bucket_name = module.data_lake.bucket_name
