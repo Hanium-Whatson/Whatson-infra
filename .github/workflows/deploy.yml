@@ -45,7 +45,11 @@ jobs:
 
             git fetch --all --prune
             git checkout "${DEPLOY_REF}"
-            git pull origin "${DEPLOY_REF}"
+            if ! git diff --quiet || ! git diff --cached --quiet; then
+              echo "Resetting tracked local changes before deployment."
+              git restore --source=HEAD --staged --worktree .
+            fi
+            git pull --ff-only origin "${DEPLOY_REF}"
 
             aws sts get-caller-identity
 
