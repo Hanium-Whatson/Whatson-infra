@@ -80,7 +80,11 @@ cd "${TF_DIR}"
 rm -f "${TF_PLAN_FILE}"
 
 terraform init -input=false
-terraform fmt -check
+if ! terraform fmt -check; then
+  echo "Terraform formatting check failed."
+  echo "Run 'terraform -chdir=${TF_DIR} fmt' or format ${TF_VARS_FILE} before deploying."
+  exit 1
+fi
 terraform validate
 terraform plan -input=false -var-file="${TF_VARS_FILE}" -out="${TF_PLAN_FILE}"
 terraform apply -input=false "${TF_PLAN_FILE}"

@@ -49,5 +49,5 @@ jobs:
 
             aws sts get-caller-identity
 
-            chmod +x scripts/training/provision-dev-training-from-cloudshell.sh
-            ./scripts/training/provision-dev-training-from-cloudshell.sh
+            chmod +x scripts/training/provision-dev-training.sh
+            ./scripts/training/provision-dev-training.sh
