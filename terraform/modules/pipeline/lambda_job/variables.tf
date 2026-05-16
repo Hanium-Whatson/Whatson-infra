@@ -38,3 +38,8 @@ variable "lambda_invoke_function_arns" {
   type    = list(string)
   default = []
 }
+variable "existing_role_arn" { type = string }
+variable "manage_log_group" {
+  type    = bool
+  default = false
+}

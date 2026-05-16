@@ -22,107 +22,15 @@ data "archive_file" "package" {
   output_path = "${path.module}/build/${var.name}.zip"
 }
 
-data "aws_iam_policy_document" "assume_role" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["lambda.amazonaws.com"]
-    }
-  }
-}
-
-data "aws_iam_policy_document" "inline" {
-  statement {
-    sid = "LogsAccess"
-    actions = [
-      "logs:CreateLogGroup",
-      "logs:CreateLogStream",
-      "logs:PutLogEvents",
-    ]
-    resources = ["*"]
-  }
-
-  dynamic "statement" {
-    for_each = length(local.s3_arns) > 0 ? [1] : []
-
-    content {
-      sid = "S3DataLakeAccess"
-      actions = [
-        "s3:GetObject",
-        "s3:PutObject",
-        "s3:ListBucket",
-      ]
-      resources = local.s3_arns
-    }
-  }
-
-  dynamic "statement" {
-    for_each = var.dead_letter_target_arn != "" ? [1] : []
-
-    content {
-      sid = "AllowDlqSend"
-      actions = [
-        "sqs:GetQueueAttributes",
-        "sqs:GetQueueUrl",
-        "sqs:SendMessage",
-      ]
-      resources = [var.dead_letter_target_arn]
-    }
-  }
-
-  dynamic "statement" {
-    for_each = var.dynamodb_table_arn != null ? [1] : []
-
-    content {
-      sid = "DynamoDbDuplicateGuardAccess"
-      actions = [
-        "dynamodb:PutItem",
-      ]
-      resources = [var.dynamodb_table_arn]
-    }
-  }
-
-  dynamic "statement" {
-    for_each = length(var.lambda_invoke_function_arns) > 0 ? [1] : []
-
-    content {
-      sid = "LambdaInvokeAccess"
-      actions = [
-        "lambda:InvokeFunction",
-      ]
-      resources = var.lambda_invoke_function_arns
-    }
-  }
-}
-
-resource "aws_iam_role" "this" {
-  name               = "${var.name}-role"
-  assume_role_policy = data.aws_iam_policy_document.assume_role.json
-}
-
-resource "aws_iam_role_policy" "this" {
-  name   = "${var.name}-inline"
-  role   = aws_iam_role.this.id
-  policy = data.aws_iam_policy_document.inline.json
-}
-
-resource "aws_iam_role_policy_attachment" "vpc" {
-  count = local.use_vpc ? 1 : 0
-
-  role       = aws_iam_role.this.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
-}
-
 resource "aws_cloudwatch_log_group" "this" {
+  count             = var.manage_log_group ? 1 : 0
   name              = "/aws/lambda/${var.name}"
   retention_in_days = var.log_retention_in_days
 }
 
 resource "aws_lambda_function" "this" {
   function_name    = var.name
-  role             = aws_iam_role.this.arn
+  role             = var.existing_role_arn
   runtime          = var.runtime
   handler          = var.handler
   timeout          = var.timeout

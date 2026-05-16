@@ -1,15 +1,16 @@
 module "training_runner" {
-  source               = "../../../modules/compute/training_spot_runner"
-  name                 = "${var.project_name}-${var.environment}-training-runner"
-  subnet_id            = data.aws_subnet.training.id
-  security_group_ids   = var.existing_security_group_ids
-  instance_type        = var.training_instance_type
-  ami_id               = var.training_ami_id
-  artifact_bucket_name = module.data_lake.bucket_name
-  artifact_bucket_arn  = module.data_lake.bucket_arn
-  checkpoint_prefix    = local.checkpoint_prefix
-  artifact_prefix      = local.artifact_prefix
-  entrypoint           = var.training_entrypoint
+  source                         = "../../../modules/compute/training_spot_runner"
+  name                           = "${var.project_name}-${var.environment}-training-runner"
+  subnet_id                      = data.aws_subnet.training.id
+  security_group_ids             = var.existing_security_group_ids
+  instance_type                  = var.training_instance_type
+  ami_id                         = var.training_ami_id
+  artifact_bucket_name           = data.aws_s3_bucket.data_lake.bucket
+  artifact_bucket_arn            = data.aws_s3_bucket.data_lake.arn
+  checkpoint_prefix              = local.checkpoint_prefix
+  artifact_prefix                = local.artifact_prefix
+  entrypoint                     = var.training_entrypoint
+  existing_instance_profile_name = var.training_runner_instance_profile_name
   environment_variables = merge(
     {
       PROJECT_NAME      = var.project_name
