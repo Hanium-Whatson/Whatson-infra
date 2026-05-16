@@ -8,6 +8,7 @@ variable "artifact_bucket_name" { type = string }
 variable "artifact_bucket_arn" { type = string }
 variable "checkpoint_prefix" { type = string }
 variable "artifact_prefix" { type = string }
+variable "existing_instance_profile_name" { type = string }
 variable "ami_id" {
   type    = string
   default = ""

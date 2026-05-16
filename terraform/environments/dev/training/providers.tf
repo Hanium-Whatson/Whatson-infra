@@ -37,6 +37,18 @@ variable "training_environment_variables" {
   type    = map(string)
   default = {}
 }
+variable "training_runner_instance_profile_name" {
+  type = string
+}
+variable "crawl_lambda_role_arn" {
+  type = string
+}
+variable "preprocess_lambda_role_arn" {
+  type = string
+}
+variable "falsify_news_lambda_role_arn" {
+  type = string
+}
 
 provider "aws" {
   region = var.aws_region

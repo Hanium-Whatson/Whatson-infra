@@ -11,5 +11,5 @@ output "public_ip" {
 }
 
 output "instance_profile_name" {
-  value = aws_iam_instance_profile.this.name
+  value = var.existing_instance_profile_name
 }

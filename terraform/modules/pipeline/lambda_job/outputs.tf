@@ -7,9 +7,9 @@ output "function_arn" {
 }
 
 output "role_arn" {
-  value = aws_iam_role.this.arn
+  value = var.existing_role_arn
 }
 
 output "log_group_name" {
-  value = aws_cloudwatch_log_group.this.name
+  value = var.manage_log_group ? aws_cloudwatch_log_group.this[0].name : "/aws/lambda/${var.name}"
 }

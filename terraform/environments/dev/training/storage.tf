@@ -1,8 +1,11 @@
-module "data_lake" {
-  source           = "../../../modules/storage/s3_data_lake"
-  name             = var.data_lake_bucket_name
-  raw_prefix       = local.raw_prefix
-  processed_prefix = local.processed_prefix
-  dataset_prefix   = local.dataset_prefix
-  artifact_prefix  = local.artifact_prefix
+data "aws_s3_bucket" "data_lake" {
+  bucket = var.data_lake_bucket_name
+}
+
+data "aws_dynamodb_table" "duplicate_guard" {
+  name = local.duplicate_guard_table_name
+}
+
+data "aws_sqs_queue" "crawl_dlq" {
+  name = local.crawl_dlq_name
 }
