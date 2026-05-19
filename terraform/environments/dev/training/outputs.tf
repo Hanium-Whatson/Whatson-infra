@@ -7,19 +7,19 @@ output "public_subnet_ids" {
 }
 
 output "data_lake_bucket" {
-  value = data.aws_s3_bucket.data_lake.bucket
+  value = var.data_lake_bucket_name
 }
 
 output "duplicate_guard_table_name" {
-  value = data.aws_dynamodb_table.duplicate_guard.name
+  value = local.duplicate_guard_table_name
 }
 
 output "duplicate_guard_table_arn" {
-  value = data.aws_dynamodb_table.duplicate_guard.arn
+  value = local.duplicate_guard_table_arn
 }
 
 output "crawl_dlq_arn" {
-  value = data.aws_sqs_queue.crawl_dlq.arn
+  value = local.crawl_dlq_arn
 }
 
 output "lambda_functions" {

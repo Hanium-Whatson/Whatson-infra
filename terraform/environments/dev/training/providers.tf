@@ -18,6 +18,18 @@ variable "existing_vpc_id" { type = string }
 variable "existing_subnet_id" { type = string }
 variable "existing_security_group_ids" { type = list(string) }
 variable "data_lake_bucket_name" { type = string }
+variable "duplicate_guard_table_name" {
+  type    = string
+  default = ""
+}
+variable "crawl_dlq_name" {
+  type    = string
+  default = ""
+}
+variable "crawl_dlq_arn" {
+  type    = string
+  default = ""
+}
 variable "crawl_schedule_expression" {
   type    = string
   default = "rate(6 hours)"
