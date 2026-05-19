@@ -12,7 +12,7 @@ module "security" {
 
 module "data_lake" {
   source           = "../../../modules/storage/s3_data_lake"
-  name             = "${var.project_name}-${var.environment}-data"
+  name             = "project1-01-virg-${var.project_name}-${var.environment}-data"
   raw_prefix       = "raw"
   processed_prefix = "processed"
   dataset_prefix   = "dataset"
