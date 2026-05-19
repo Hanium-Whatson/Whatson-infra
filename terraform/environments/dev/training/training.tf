@@ -5,8 +5,8 @@ module "training_runner" {
   security_group_ids             = var.existing_security_group_ids
   instance_type                  = var.training_instance_type
   ami_id                         = var.training_ami_id
-  artifact_bucket_name           = data.aws_s3_bucket.data_lake.bucket
-  artifact_bucket_arn            = data.aws_s3_bucket.data_lake.arn
+  artifact_bucket_name           = var.data_lake_bucket_name
+  artifact_bucket_arn            = local.data_lake_bucket_arn
   checkpoint_prefix              = local.checkpoint_prefix
   artifact_prefix                = local.artifact_prefix
   entrypoint                     = var.training_entrypoint
